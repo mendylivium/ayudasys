@@ -1,0 +1,20 @@
+package migrations
+
+import (
+	"gorm.io/gorm"
+
+	"go-mvc/database"
+)
+
+func init() {
+	register(database.Migration{
+		Name: "{{.Name}}",
+		Up: func(tx *gorm.DB) error {
+			// e.g. return tx.Exec("ALTER TABLE ...").Error
+			return nil
+		},
+		Down: func(tx *gorm.DB) error {
+			return nil
+		},
+	})
+}

@@ -1,0 +1,18 @@
+package policies
+
+import "go-mvc/app/models"
+
+// View{{.Model}} reports whether u may view the {{.Model}}.
+func View{{.Model}}(u *models.User, m *models.{{.Model}}) bool {
+	return true
+}
+
+// Update{{.Model}} reports whether u may update the {{.Model}}.
+func Update{{.Model}}(u *models.User, m *models.{{.Model}}) bool {
+	return u != nil && u.IsAdmin()
+}
+
+// Delete{{.Model}} reports whether u may delete the {{.Model}}.
+func Delete{{.Model}}(u *models.User, m *models.{{.Model}}) bool {
+	return Update{{.Model}}(u, m)
+}

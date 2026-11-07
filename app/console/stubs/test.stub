@@ -1,0 +1,23 @@
+package tests
+
+import (
+	"testing"
+
+	"github.com/gofiber/fiber/v3"
+)
+
+func Test{{.Name}}(t *testing.T) {
+	app := setup(t) // fresh migrated + seeded SQLite database
+
+	// Inertia visits return the page as JSON: {component, props, url, version}.
+	resp := send(t, app, "GET", "/", "", map[string]string{"X-Inertia": "true", "X-Inertia-Version": ""})
+	if resp.StatusCode != fiber.StatusOK {
+		t.Fatalf("expected 200, got %d", resp.StatusCode)
+	}
+	if page := decode(t, resp); page["component"] != "Welcome" {
+		t.Fatalf("unexpected component %v", page["component"])
+	}
+
+	// JSON API example:
+	// resp = send(t, app, "GET", "/api/posts", "", nil)
+}

@@ -1,0 +1,28 @@
+package migrations
+
+import (
+	"time"
+
+	"gorm.io/gorm"
+
+	"go-mvc/database"
+)
+
+func init() {
+	type row struct {
+		ID        uint `gorm:"primaryKey"`
+		CreatedAt time.Time
+		UpdatedAt time.Time
+		DeletedAt gorm.DeletedAt `gorm:"index"`
+	}
+
+	register(database.Migration{
+		Name: "{{.Name}}",
+		Up: func(tx *gorm.DB) error {
+			return tx.Table("{{.Table}}").Migrator().CreateTable(&row{})
+		},
+		Down: func(tx *gorm.DB) error {
+			return tx.Migrator().DropTable("{{.Table}}")
+		},
+	})
+}

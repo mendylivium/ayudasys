@@ -1,0 +1,30 @@
+<script setup>
+import { Head, Link, useForm } from '@inertiajs/vue3'
+import AppLayout from '@/Layouts/AppLayout.vue'
+import FormField from '@/Components/FormField.vue'
+
+const form = useForm({
+  name: '',
+})
+</script>
+
+<template>
+  <AppLayout>
+    <Head title="New [[.Title]]" />
+
+    <div class="card mx-auto max-w-2xl border border-base-300 bg-base-100">
+      <form class="card-body" @submit.prevent="form.post('/[[.Route]]')">
+        <h1 class="card-title text-2xl">New [[.Title]]</h1>
+
+        <FormField v-slot="{ invalid }" label="Name" :error="form.errors.name">
+          <input v-model="form.name" type="text" class="input w-full" :class="{ 'input-error': invalid }" autofocus />
+        </FormField>
+
+        <div class="card-actions justify-end pt-2">
+          <Link href="/[[.Route]]" class="btn btn-ghost">Cancel</Link>
+          <button type="submit" class="btn btn-primary" :disabled="form.processing">Create</button>
+        </div>
+      </form>
+    </div>
+  </AppLayout>
+</template>

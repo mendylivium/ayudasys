@@ -1,0 +1,26 @@
+root = "."
+tmp_dir = "tmp"
+
+[build]
+  cmd = "go build -o ./tmp/main ."
+  bin = "./tmp/main"
+  args_bin = ["serve"]
+  delay = 500
+  exclude_dir = ["node_modules", "dist", "public", "resources/js", "resources/css", "storage", "tmp", "vendor"]
+  include_ext = ["go", "html", "stub", "env"]
+  kill_delay = "1s"
+  send_interrupt = true
+  log = "build-errors.log"
+  stop_on_error = true
+
+[log]
+  time = true
+
+[color]
+  build = "yellow"
+  main = "magenta"
+  runner = "green"
+  watcher = "cyan"
+
+[misc]
+  clean_on_exit = true

@@ -1,0 +1,24 @@
+# Environment
+.env
+
+# Databases / runtime storage
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+storage/*
+!storage/.gitkeep
+
+# Build output
+/dist/
+/tmp/
+/bin/
+build-errors.log
+
+# Frontend
+node_modules/
+
+# Editors / OS
+.idea/
+.vscode/
+.DS_Store

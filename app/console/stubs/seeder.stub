@@ -1,0 +1,12 @@
+package seeders
+
+import "gorm.io/gorm"
+
+// {{.Name}} — add it to DatabaseSeeder in database/seeders/seeder.go.
+type {{.Name}} struct{}
+
+func ({{.Name}}) Name() string { return "{{.Name}}" }
+
+func ({{.Name}}) Run(db *gorm.DB) error {
+	return nil
+}

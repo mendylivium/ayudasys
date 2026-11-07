@@ -1,0 +1,47 @@
+<script setup>
+import { Head, Link } from '@inertiajs/vue3'
+import AppLayout from '@/Layouts/AppLayout.vue'
+import Pagination from '@/Components/Pagination.vue'
+import { formatDate } from '@/lib/format'
+
+defineProps({
+  items: { type: Object, required: true },
+})
+</script>
+
+<template>
+  <AppLayout>
+    <Head title="[[.Plural]]" />
+
+    <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
+      <h1 class="text-2xl font-bold">[[.Plural]]</h1>
+      <Link href="/[[.Route]]/create" class="btn btn-primary btn-sm">New [[.Title]]</Link>
+    </div>
+
+    <div class="overflow-x-auto rounded-box border border-base-300 bg-base-100">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Created</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="item in items.data" :key="item.id" class="hover:bg-base-200">
+            <td>
+              <Link :href="`/[[.Route]]/${item.id}`" class="link-hover font-medium">{{ item.name }}</Link>
+            </td>
+            <td>{{ formatDate(item.created_at) }}</td>
+          </tr>
+          <tr v-if="!items.data.length">
+            <td colspan="2" class="py-8 text-center text-base-content/60">No [[.Title]] records yet.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="mt-6">
+      <Pagination :meta="items" />
+    </div>
+  </AppLayout>
+</template>

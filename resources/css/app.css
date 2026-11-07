@@ -1,0 +1,449 @@
+﻿@import 'tailwindcss';
+@source '../js';
+@plugin 'daisyui' {
+  themes: light --default;
+}
+
+/* Layout only. Colors, component shapes, and typography use DaisyUI defaults. */
+@layer base {
+  h1 {
+    @apply text-2xl md:text-[28px] font-semibold tracking-tight;
+  }
+  h2 {
+    @apply text-lg font-semibold;
+  }
+  h3 {
+    @apply font-semibold;
+  }
+  label:not(.btn, .drawer-overlay, .fieldset-legend, .input) {
+    @apply block text-sm my-4;
+  }
+  label > .input,
+  label > .select,
+  label > .textarea {
+    @apply mt-2;
+  }
+}
+.main-content {
+  @apply w-full max-w-[1320px] mx-auto flex-1 min-w-0 px-4 py-7 md:px-8 md:py-9;
+}
+.skip-link {
+  @apply fixed top-3 left-3 z-50 -translate-y-24 focus:translate-y-0;
+}
+.page-heading {
+  @apply flex flex-wrap justify-between items-center gap-4 mb-7;
+}
+.page-heading .muted {
+  @apply mt-2;
+}
+.eyebrow {
+  @apply text-xs font-semibold tracking-wider text-base-content/60 mb-2;
+}
+.muted {
+  @apply text-sm text-base-content/70 leading-relaxed;
+}
+.stats-grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6;
+}
+.stat > strong {
+  @apply stat-value block my-3;
+}
+.stat > small {
+  @apply stat-desc whitespace-normal;
+}
+.dashboard-columns,
+.form-columns,
+.scanner-columns {
+  @apply grid grid-cols-1 xl:grid-cols-2 gap-6 mb-6;
+}
+.dashboard-columns > *,
+.form-columns > *,
+.scanner-columns > * {
+  @apply min-w-0;
+}
+.panel-heading {
+  @apply flex flex-wrap items-center justify-between gap-4 px-6 py-5 border-b border-base-200;
+}
+.panel-heading .muted {
+  @apply mt-1;
+}
+.panel-heading.bare {
+  @apply p-0 border-0 mb-4;
+}
+.program-row {
+  @apply flex items-center gap-4 p-6 border-b border-base-300;
+}
+.program-row:last-child {
+  @apply border-0;
+}
+.program-row p {
+  @apply text-sm text-base-content/70 mt-1;
+}
+.program-row .grow {
+  @apply min-w-0;
+}
+.meta {
+  @apply flex flex-wrap gap-3 text-xs text-base-content/70 mt-3;
+}
+.meta span {
+  @apply inline-flex items-center gap-1;
+}
+.workflow-panel {
+  @apply p-6;
+}
+.workflow-step {
+  @apply flex items-start gap-4 mt-6;
+}
+.workflow-step > span {
+  @apply flex items-center justify-center size-7 shrink-0 rounded-full bg-base-200;
+}
+.workflow-step p {
+  @apply text-sm text-base-content/70 mt-1;
+}
+.workflow-panel > .alert {
+  @apply mt-6;
+}
+.activity-panel {
+  @apply mt-6;
+}
+.table-wrap {
+  @apply overflow-x-auto;
+}
+.table td small {
+  @apply block text-xs text-base-content/60 mt-1;
+}
+.name-cell {
+  @apply flex items-center gap-3;
+}
+.empty-state {
+  @apply flex flex-col items-center justify-center gap-4 text-center p-10;
+}
+.empty-state p {
+  @apply text-sm text-base-content/70 max-w-md;
+}
+.empty-state.compact {
+  @apply p-6;
+}
+.form-panel {
+  @apply p-6 mb-6;
+}
+.form-panel h2 {
+  @apply flex items-center gap-2 mb-4;
+}
+.form-panel > .muted {
+  @apply mb-4;
+}
+.field-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-x-4;
+}
+.form-actions {
+  @apply flex flex-wrap justify-end gap-3 my-5;
+}
+.field-error {
+  @apply text-sm text-error mt-2;
+}
+.member-row {
+  @apply grid grid-cols-2 md:grid-cols-[1.4fr_1fr_5rem_2.5rem] gap-3 items-center;
+}
+.community-map {
+  @apply h-80 w-full rounded-box relative z-0 bg-base-200;
+}
+.map-dot span {
+  display: block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid var(--color-base-100);
+  border-radius: 50%;
+  background: var(--color-primary);
+  box-shadow: 0 1px 4px #0004;
+}
+.map-dot.status-claimed span {
+  background: var(--color-success);
+}
+.map-dot.status-pending span {
+  background: var(--color-warning);
+}
+.map-dot.status-not_enrolled span,
+.map-dot.status-no_program span {
+  background: var(--color-neutral);
+}
+.location-button {
+  @apply mb-4;
+}
+.toolbar {
+  @apply flex flex-wrap items-center justify-between gap-4 p-5;
+}
+.search-box {
+  @apply flex items-center gap-3 flex-1 min-w-0;
+}
+.search-box .input {
+  @apply min-w-0;
+}
+.status-toolbar {
+  @apply items-end;
+}
+.status-toolbar label {
+  @apply flex-1 min-w-48 m-0;
+}
+.map-legend {
+  @apply flex flex-wrap gap-4 px-5 pb-5 text-sm;
+}
+.map-legend > span {
+  @apply inline-flex items-center gap-2;
+}
+.map-legend small {
+  @apply w-full text-base-content/60;
+}
+.legend-dot {
+  @apply size-3 rounded-full bg-neutral;
+}
+.legend-dot.status-claimed {
+  @apply bg-success;
+}
+.legend-dot.status-pending {
+  @apply bg-warning;
+}
+.info-strip {
+  @apply flex flex-wrap items-center gap-3 text-sm mb-5;
+}
+.detail-grid {
+  @apply grid grid-cols-2 gap-5 my-6;
+}
+.detail-grid small,
+.assistance-box small {
+  @apply block text-xs text-base-content/60 mb-2;
+}
+.inline-form {
+  @apply flex flex-col sm:flex-row gap-4 items-stretch;
+}
+.stub-grid {
+  @apply grid grid-cols-1 xl:grid-cols-2 gap-5;
+}
+.qr-stub {
+  @apply bg-base-100 border border-dashed border-base-300 rounded-box overflow-hidden;
+  break-inside: avoid;
+}
+.stub-header {
+  @apply flex justify-between gap-3 bg-base-200 p-4;
+}
+.stub-header > span {
+  @apply text-xs;
+}
+.stub-body {
+  @apply flex items-center justify-between gap-3 p-5;
+}
+.stub-body > div {
+  @apply min-w-0;
+}
+.stub-body p {
+  @apply text-sm text-base-content/70 mt-2;
+}
+.stub-body img {
+  @apply size-32 sm:size-40 shrink-0;
+}
+.stub-body dt {
+  @apply text-xs text-base-content/60 mt-4;
+}
+.stub-body dd {
+  @apply text-sm mt-1;
+}
+.stub-instruction {
+  @apply border-t border-dashed border-base-300 p-4 text-xs;
+}
+.stub-token {
+  @apply px-5 pb-4 text-xs break-all;
+}
+.program-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5;
+}
+.program-card {
+  @apply p-6;
+}
+.program-card h2 {
+  @apply my-4;
+}
+.program-card > p {
+  @apply text-sm text-base-content/70;
+}
+.program-details {
+  @apply flex flex-col gap-3 my-6 text-sm;
+}
+.program-details > span {
+  @apply flex items-center gap-2;
+}
+.program-card .text-error {
+  @apply mt-5;
+}
+.role-grid svg {
+  @apply mb-4;
+}
+.role-grid h3 {
+  @apply mb-2;
+}
+.scanner-stage {
+  @apply bg-base-200 border border-dashed border-base-300 rounded-box min-h-72 my-5 overflow-hidden relative;
+}
+.scanner-placeholder {
+  @apply flex flex-col items-center justify-center min-h-72 gap-3 text-center p-4;
+}
+.scanner-placeholder p {
+  @apply text-sm text-base-content/60;
+}
+.verification-empty {
+  @apply flex flex-col items-center gap-5 text-center px-4 py-12;
+}
+.verification-empty p {
+  @apply text-sm text-base-content/70 max-w-sm;
+}
+.recipient-name {
+  @apply text-2xl;
+}
+.assistance-box p {
+  @apply text-sm mt-2;
+}
+.checkbox-label {
+  @apply flex! items-start gap-3 leading-relaxed;
+}
+.checkbox-label .checkbox {
+  @apply shrink-0;
+}
+.login-screen {
+  @apply min-h-screen grid grid-cols-1 lg:grid-cols-2;
+}
+.login-story {
+  @apply flex flex-col justify-between gap-10 bg-base-200 p-6 lg:p-12;
+}
+.login-story h1 {
+  @apply text-4xl lg:text-5xl leading-tight my-6;
+}
+.login-story p {
+  @apply text-base-content/70 leading-relaxed;
+}
+.login-story > small {
+  @apply text-base-content/60;
+}
+.login-features {
+  @apply flex flex-wrap gap-5 mt-8;
+}
+.login-features span {
+  @apply inline-flex items-center gap-2 text-sm;
+}
+.login-features svg {
+  @apply size-5;
+}
+.login-form {
+  @apply flex items-center justify-center bg-base-100 p-6 lg:p-12;
+}
+.login-form > div {
+  @apply w-full max-w-sm;
+}
+.login-form h2 {
+  @apply text-3xl mb-3;
+}
+.login-form form {
+  @apply mt-6;
+}
+.login-form .btn {
+  @apply w-full mt-4;
+}
+.login-help {
+  @apply text-sm text-base-content/60 mt-6;
+}
+@media (max-width: 700px) {
+  .breadcrumbs li::before {
+    display: none;
+  }
+  .form-panel,
+  .program-card {
+    @apply p-4;
+  }
+  .stub-body {
+    @apply flex-col items-start;
+  }
+  .stub-body img {
+    @apply self-center;
+  }
+  .detail-grid {
+    @apply gap-3;
+  }
+  .login-story > div:not(:first-child),
+  .login-story > small {
+    display: none;
+  }
+  .search-box {
+    @apply basis-full;
+  }
+}
+@media print {
+  .no-print,
+  .toast {
+    display: none !important;
+  }
+  .drawer {
+    display: block;
+  }
+  .main-content {
+    padding: 0;
+    max-width: none;
+  }
+  .stub-grid {
+    display: block;
+  }
+  .qr-stub {
+    margin: 15px;
+    break-inside: avoid;
+    max-width: 650px;
+  }
+  .stub-body img {
+    width: 180px;
+    height: 180px;
+  }
+  body {
+    background: white;
+  }
+}
+
+/* Shared data density and form rhythm; DaisyUI theme tokens remain unchanged. */
+.table th {
+  @apply font-medium text-xs text-base-content/50;
+}
+.table th,
+.table td {
+  @apply px-5 py-4;
+}
+.form-panel > label,
+.field-grid > label {
+  @apply font-medium text-base-content/80;
+}
+.form-panel {
+  @apply shadow-none;
+}
+.form-panel .input,
+.form-panel .textarea,
+.form-panel .select {
+  @apply font-normal;
+}
+.form-panel > .alert {
+  @apply text-sm;
+}
+.form-columns > section {
+  @apply self-start;
+}
+.form-actions {
+  @apply border-t border-base-300 pt-5;
+}
+.member-row {
+  @apply border-t border-base-200 py-2;
+}
+.program-card > .alert {
+  @apply mt-2;
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

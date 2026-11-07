@@ -1,0 +1,17 @@
+package middleware
+
+import "github.com/gofiber/fiber/v3"
+
+// {{.Name}} — register it in routes/web.go or routes/api.go:
+//
+//	r.Get("/path", mw.{{.Name}}(), handler)
+func {{.Name}}() fiber.Handler {
+	return func(c fiber.Ctx) error {
+		// before the request...
+
+		err := c.Next()
+
+		// ...after the response
+		return err
+	}
+}

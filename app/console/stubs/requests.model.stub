@@ -1,0 +1,15 @@
+package requests
+
+import "strings"
+
+type Store{{.Model}}Request struct {
+	Name string `json:"name" form:"name" validate:"required,max=255"`
+}
+
+func (r *Store{{.Model}}Request) Normalize() { r.Name = strings.TrimSpace(r.Name) }
+
+type Update{{.Model}}Request struct {
+	Name string `json:"name" form:"name" validate:"required,max=255"`
+}
+
+func (r *Update{{.Model}}Request) Normalize() { r.Name = strings.TrimSpace(r.Name) }

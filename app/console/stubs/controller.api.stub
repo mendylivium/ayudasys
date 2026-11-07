@@ -1,0 +1,41 @@
+package api
+
+import (
+	"github.com/gofiber/fiber/v3"
+	"gorm.io/gorm"
+
+	"go-mvc/pkg/response"
+)
+
+type {{.Name}} struct {
+	db *gorm.DB
+}
+
+func New{{.Name}}(db *gorm.DB) *{{.Name}} {
+	return &{{.Name}}{db: db}
+}
+
+// GET /api/{{.Route}}
+func (h *{{.Name}}) Index(c fiber.Ctx) error {
+	return response.OK(c, "OK", []any{})
+}
+
+// GET /api/{{.Route}}/:id
+func (h *{{.Name}}) Show(c fiber.Ctx) error {
+	return response.OK(c, "OK", fiber.Map{"id": c.Params("id")})
+}
+
+// POST /api/{{.Route}}
+func (h *{{.Name}}) Store(c fiber.Ctx) error {
+	return response.Created(c, "Created", nil)
+}
+
+// PUT /api/{{.Route}}/:id
+func (h *{{.Name}}) Update(c fiber.Ctx) error {
+	return response.OK(c, "Updated", nil)
+}
+
+// DELETE /api/{{.Route}}/:id
+func (h *{{.Name}}) Destroy(c fiber.Ctx) error {
+	return response.OK(c, "Deleted", nil)
+}

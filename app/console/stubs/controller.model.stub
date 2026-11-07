@@ -1,0 +1,143 @@
+package controllers
+
+import (
+	"errors"
+	"strconv"
+
+	"github.com/gofiber/fiber/v3"
+	"gorm.io/gorm"
+{{if .Policy}}
+	"go-mvc/app/auth"{{end}}{{if .Requests}}
+	"go-mvc/app/http/requests"{{end}}
+	"go-mvc/app/models"{{if .Policy}}
+	"go-mvc/app/policies"{{end}}
+	"go-mvc/pkg/inertia"
+	"go-mvc/pkg/pagination"
+)
+
+// {{.Name}} — register with: Resource(r, "/{{.Route}}", controllers.New{{.Name}}(db), auth)
+type {{.Name}} struct {
+	db *gorm.DB
+}
+
+func New{{.Name}}(db *gorm.DB) *{{.Name}} {
+	return &{{.Name}}{db: db}
+}
+
+// GET /{{.Route}}
+func (h *{{.Name}}) Index(c fiber.Ctx) error {
+	items, err := pagination.Paginate[models.{{.Model}}](c, h.db.Model(&models.{{.Model}}{}).Order("id DESC"), 15)
+	if err != nil {
+		return err
+	}
+	return inertia.Render(c, "{{.Pages}}/Index", fiber.Map{"items": items})
+}
+
+// GET /{{.Route}}/create
+func (h *{{.Name}}) Create(c fiber.Ctx) error {
+	return inertia.Render(c, "{{.Pages}}/Create", nil)
+}
+
+// POST /{{.Route}}
+func (h *{{.Name}}) Store(c fiber.Ctx) error {
+{{- if .Requests}}
+	var req requests.Store{{.Model}}Request
+{{- else}}
+	var req struct {
+		Name string `json:"name" form:"name" validate:"required,max=255"`
+	}
+{{- end}}
+	if ok, err := bind(c, &req); !ok {
+		return err
+	}
+
+	item := models.{{.Model}}{Name: req.Name}
+	if err := h.db.Create(&item).Error; err != nil {
+		return err
+	}
+	return redirect(c, "/{{.Route}}/"+strconv.Itoa(int(item.ID)), "success", "{{.Title}} created.")
+}
+
+// GET /{{.Route}}/:id
+func (h *{{.Name}}) Show(c fiber.Ctx) error {
+	item, err := h.find(c)
+	if err != nil {
+		return err
+	}
+	return inertia.Render(c, "{{.Pages}}/Show", fiber.Map{"item": item})
+}
+
+// GET /{{.Route}}/:id/edit
+func (h *{{.Name}}) Edit(c fiber.Ctx) error {
+	item, err := h.find(c)
+	if err != nil {
+		return err
+	}
+{{- if .Policy}}
+	if !policies.Update{{.Model}}(auth.User(c), item) {
+		return fiber.ErrForbidden
+	}
+{{- end}}
+	return inertia.Render(c, "{{.Pages}}/Edit", fiber.Map{"item": item})
+}
+
+// PUT /{{.Route}}/:id
+func (h *{{.Name}}) Update(c fiber.Ctx) error {
+	item, err := h.find(c)
+	if err != nil {
+		return err
+	}
+{{- if .Policy}}
+	if !policies.Update{{.Model}}(auth.User(c), item) {
+		return fiber.ErrForbidden
+	}
+{{- end}}
+{{if .Requests}}
+	var req requests.Update{{.Model}}Request
+{{- else}}
+	var req struct {
+		Name string `json:"name" form:"name" validate:"required,max=255"`
+	}
+{{- end}}
+	if ok, err := bind(c, &req); !ok {
+		return err
+	}
+
+	item.Name = req.Name
+	if err := h.db.Save(item).Error; err != nil {
+		return err
+	}
+	return redirect(c, "/{{.Route}}/"+strconv.Itoa(int(item.ID)), "success", "{{.Title}} updated.")
+}
+
+// DELETE /{{.Route}}/:id
+func (h *{{.Name}}) Destroy(c fiber.Ctx) error {
+	item, err := h.find(c)
+	if err != nil {
+		return err
+	}
+{{- if .Policy}}
+	if !policies.Delete{{.Model}}(auth.User(c), item) {
+		return fiber.ErrForbidden
+	}
+{{- end}}
+	if err := h.db.Delete(item).Error; err != nil {
+		return err
+	}
+	return redirect(c, "/{{.Route}}", "success", "{{.Title}} deleted.")
+}
+
+func (h *{{.Name}}) find(c fiber.Ctx) (*models.{{.Model}}, error) {
+	id, err := paramID(c)
+	if err != nil {
+		return nil, err
+	}
+	var item models.{{.Model}}
+	if err := h.db.First(&item, id).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, fiber.ErrNotFound
+		}
+		return nil, err
+	}
+	return &item, nil
+}

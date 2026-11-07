@@ -1,0 +1,9 @@
+node_modules
+dist
+tmp
+bin
+.env
+storage/*
+!storage/.gitkeep
+*.db
+.git

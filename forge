@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# GoMVC Forge — the project's command runner (migrations, generators, ...).
+#
+#   ./forge list
+#   ./forge migrate --seed
+#   ./forge make:controller PostController
+#
+# Builds the app's CLI (main.go) into tmp/ and runs it. Go caches the build,
+# so repeated calls are fast. In production, call the compiled binary instead:
+#   ./go-mvc migrate
+set -euo pipefail
+cd "$(dirname "$0")"
+go build -o tmp/forge .
+exec tmp/forge "$@"

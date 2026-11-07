@@ -1,0 +1,118 @@
+package api
+
+import (
+	"github.com/gofiber/fiber/v3"
+	"gorm.io/gorm"
+{{if .Policy}}
+	"go-mvc/app/auth"{{end}}{{if .Requests}}
+	"go-mvc/app/http/requests"{{end}}
+	"go-mvc/app/models"{{if .Policy}}
+	"go-mvc/app/policies"{{end}}
+	"go-mvc/pkg/pagination"
+	"go-mvc/pkg/response"
+)
+
+// {{.Name}} — register with: APIResource(r, "/{{.Route}}", api.New{{.Name}}(db), protected)
+type {{.Name}} struct {
+	db *gorm.DB
+}
+
+func New{{.Name}}(db *gorm.DB) *{{.Name}} {
+	return &{{.Name}}{db: db}
+}
+
+// GET /api/{{.Route}}
+func (h *{{.Name}}) Index(c fiber.Ctx) error {
+	items, err := pagination.Paginate[models.{{.Model}}](c, h.db.Model(&models.{{.Model}}{}).Order("id DESC"), 15)
+	if err != nil {
+		return response.InternalError(c, "Failed to load {{.Route}}")
+	}
+	return response.OK(c, "{{.Plural}} retrieved", items)
+}
+
+// POST /api/{{.Route}}
+func (h *{{.Name}}) Store(c fiber.Ctx) error {
+{{- if .Requests}}
+	var req requests.Store{{.Model}}Request
+{{- else}}
+	var req struct {
+		Name string `json:"name" form:"name" validate:"required,max=255"`
+	}
+{{- end}}
+	if ok, err := bind(c, &req); !ok {
+		return err
+	}
+
+	item := models.{{.Model}}{Name: req.Name}
+	if err := h.db.Create(&item).Error; err != nil {
+		return response.InternalError(c, "Failed to create {{.Var}}")
+	}
+	return response.Created(c, "{{.Title}} created", item)
+}
+
+// GET /api/{{.Route}}/:id
+func (h *{{.Name}}) Show(c fiber.Ctx) error {
+	item, ok := h.find(c)
+	if !ok {
+		return response.NotFound(c, "{{.Title}} not found")
+	}
+	return response.OK(c, "{{.Title}} retrieved", item)
+}
+
+// PUT /api/{{.Route}}/:id
+func (h *{{.Name}}) Update(c fiber.Ctx) error {
+	item, ok := h.find(c)
+	if !ok {
+		return response.NotFound(c, "{{.Title}} not found")
+	}
+{{- if .Policy}}
+	if !policies.Update{{.Model}}(auth.User(c), item) {
+		return response.Forbidden(c, "You cannot update this {{.Var}}")
+	}
+{{- end}}
+{{if .Requests}}
+	var req requests.Update{{.Model}}Request
+{{- else}}
+	var req struct {
+		Name string `json:"name" form:"name" validate:"required,max=255"`
+	}
+{{- end}}
+	if ok, err := bind(c, &req); !ok {
+		return err
+	}
+
+	item.Name = req.Name
+	if err := h.db.Save(item).Error; err != nil {
+		return response.InternalError(c, "Failed to update {{.Var}}")
+	}
+	return response.OK(c, "{{.Title}} updated", item)
+}
+
+// DELETE /api/{{.Route}}/:id
+func (h *{{.Name}}) Destroy(c fiber.Ctx) error {
+	item, ok := h.find(c)
+	if !ok {
+		return response.NotFound(c, "{{.Title}} not found")
+	}
+{{- if .Policy}}
+	if !policies.Delete{{.Model}}(auth.User(c), item) {
+		return response.Forbidden(c, "You cannot delete this {{.Var}}")
+	}
+{{- end}}
+	if err := h.db.Delete(item).Error; err != nil {
+		return response.InternalError(c, "Failed to delete {{.Var}}")
+	}
+	return response.OK(c, "{{.Title}} deleted", nil)
+}
+
+func (h *{{.Name}}) find(c fiber.Ctx) (*models.{{.Model}}, bool) {
+	id, ok := paramID(c)
+	if !ok {
+		return nil, false
+	}
+	var item models.{{.Model}}
+	if err := h.db.First(&item, id).Error; err != nil {
+		return nil, false
+	}
+	return &item, true
+}

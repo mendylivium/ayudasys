@@ -1,0 +1,51 @@
+package controllers
+
+import (
+	"github.com/gofiber/fiber/v3"
+	"gorm.io/gorm"
+
+	"go-mvc/pkg/inertia"
+)
+
+type {{.Name}} struct {
+	db *gorm.DB
+}
+
+func New{{.Name}}(db *gorm.DB) *{{.Name}} {
+	return &{{.Name}}{db: db}
+}
+
+// GET /{{.Route}}
+func (h *{{.Name}}) Index(c fiber.Ctx) error {
+	return inertia.Render(c, "{{.Pages}}/Index", fiber.Map{})
+}
+
+// GET /{{.Route}}/create
+func (h *{{.Name}}) Create(c fiber.Ctx) error {
+	return inertia.Render(c, "{{.Pages}}/Create", nil)
+}
+
+// POST /{{.Route}}
+func (h *{{.Name}}) Store(c fiber.Ctx) error {
+	return redirect(c, "/{{.Route}}", "success", "Created.")
+}
+
+// GET /{{.Route}}/:id
+func (h *{{.Name}}) Show(c fiber.Ctx) error {
+	return inertia.Render(c, "{{.Pages}}/Show", fiber.Map{"id": c.Params("id")})
+}
+
+// GET /{{.Route}}/:id/edit
+func (h *{{.Name}}) Edit(c fiber.Ctx) error {
+	return inertia.Render(c, "{{.Pages}}/Edit", fiber.Map{"id": c.Params("id")})
+}
+
+// PUT /{{.Route}}/:id
+func (h *{{.Name}}) Update(c fiber.Ctx) error {
+	return back(c, "success", "Updated.")
+}
+
+// DELETE /{{.Route}}/:id
+func (h *{{.Name}}) Destroy(c fiber.Ctx) error {
+	return redirect(c, "/{{.Route}}", "success", "Deleted.")
+}

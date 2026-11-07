@@ -1,0 +1,15 @@
+{
+  "source": "Local AyudaSys UI",
+  "database": "storage/ad-demo.db",
+  "fictional": true,
+  "lookup": "Actual stub-code lookup, no physical camera scan",
+  "release": "Confirmed through UI",
+  "screens": [
+    "register",
+    "stub",
+    "verify",
+    "confirm",
+    "released",
+    "dashboard"
+  ]
+}
