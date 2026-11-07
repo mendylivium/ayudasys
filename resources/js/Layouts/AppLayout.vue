@@ -22,7 +22,7 @@ const links = computed(() => [
   ...(['admin', 'enumerator'].includes(user.value?.role)
     ? [{ label: 'Household census', href: '/households', icon: House }]
     : []),
-  { label: 'Ayuda programs', href: '/programs', icon: Package },
+  { label: 'Assistance programs', href: '/programs', icon: Package },
   ...(['admin', 'distributor'].includes(user.value?.role)
     ? [{ label: 'Scan & distribute', href: '/distribute', icon: ScanLine }]
     : []),

@@ -121,7 +121,7 @@ func (a *AyudaController) StoreHousehold(c fiber.Ctx) error {
 	if err := a.db.Create(&h).Error; err != nil {
 		return err
 	}
-	return redirect(c, "/households/"+strconv.Itoa(int(h.ID)), "success", "Na-save ang household census.")
+	return redirect(c, "/households/"+strconv.Itoa(int(h.ID)), "success", "Household record saved.")
 }
 func (a *AyudaController) Household(c fiber.Ctx) error {
 	id, err := paramID(c)
@@ -158,7 +158,7 @@ func (a *AyudaController) StoreProgram(c fiber.Ctx) error {
 	if err := a.db.Create(&p).Error; err != nil {
 		return err
 	}
-	return redirect(c, "/programs", "success", "Nagawa na ang ayuda program.")
+	return redirect(c, "/programs", "success", "Assistance program created.")
 }
 func (a *AyudaController) CloseProgram(c fiber.Ctx) error {
 	id, err := paramID(c)
@@ -172,7 +172,7 @@ func (a *AyudaController) CloseProgram(c fiber.Ctx) error {
 	if result.RowsAffected == 0 {
 		return fiber.ErrNotFound
 	}
-	return back(c, "success", "Sarado na ang program. Hindi na puwedeng mag-enroll o mag-claim.")
+	return back(c, "success", "Program closed. New enrollments and claims are no longer allowed.")
 }
 func (a *AyudaController) Enroll(c fiber.Ctx) error {
 	var r requests.EnrollmentRequest
@@ -188,7 +188,7 @@ func (a *AyudaController) Enroll(c fiber.Ctx) error {
 		return recordError(err)
 	}
 	if p.Status != "open" {
-		return back(c, "error", "Sarado na ang program.")
+		return back(c, "error", "This program is closed.")
 	}
 	b := make([]byte, 32)
 	if _, err := rand.Read(b); err != nil {
@@ -200,9 +200,9 @@ func (a *AyudaController) Enroll(c fiber.Ctx) error {
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return back(c, "error", "Naka-enroll na ang household sa program na ito.")
+		return back(c, "error", "This household is already enrolled in this program.")
 	}
-	return back(c, "success", "Enrolled na. Maaari nang i-print ang QR stub.")
+	return back(c, "success", "Household enrolled. The QR stub is ready to print.")
 }
 func (a *AyudaController) Distribute(c fiber.Ctx) error {
 	var programs []models.Program
@@ -214,11 +214,11 @@ func (a *AyudaController) Distribute(c fiber.Ctx) error {
 func (a *AyudaController) Lookup(c fiber.Ctx) error {
 	var e models.Enrollment
 	if len(c.Query("token")) != 64 {
-		return c.Status(422).JSON(fiber.Map{"message": "Hindi valid ang QR o stub code."})
+		return c.Status(422).JSON(fiber.Map{"message": "Invalid QR or stub code."})
 	}
 	err := a.db.Preload("Household.Members").Preload("Program").Where("token = ? AND program_id = ?", c.Query("token"), c.Query("program_id")).First(&e).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return c.Status(404).JSON(fiber.Map{"message": "Walang enrollment para sa QR na ito sa napiling program."})
+		return c.Status(404).JSON(fiber.Map{"message": "No enrollment matches this QR code in the selected program."})
 	}
 	if err != nil {
 		return err
@@ -241,7 +241,7 @@ func (a *AyudaController) Claim(c fiber.Ctx) error {
 			return recordError(err)
 		}
 		if p.Status != "open" {
-			return fiber.NewError(409, "Sarado na ang program.")
+			return fiber.NewError(409, "This program is closed.")
 		}
 		var e models.Enrollment
 		if err := tx.Where("token = ? AND program_id = ?", r.Token, r.ProgramID).First(&e).Error; err != nil {
@@ -253,7 +253,7 @@ func (a *AyudaController) Claim(c fiber.Ctx) error {
 			return result.Error
 		}
 		if result.RowsAffected == 0 {
-			return fiber.NewError(409, "Na-claim na ang ayuda ng household na ito.")
+			return fiber.NewError(409, "This household has already claimed assistance for this program.")
 		}
 		return nil
 	})
@@ -264,7 +264,7 @@ func (a *AyudaController) Claim(c fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	return back(c, "success", "Na-release na ang ayuda. Naitala ang claimant, oras, at releasing officer.")
+	return back(c, "success", "Assistance released. The claimant, time, and releasing officer have been recorded.")
 }
 func (a *AyudaController) Team(c fiber.Ctx) error {
 	var users []models.User
@@ -287,9 +287,9 @@ func (a *AyudaController) StoreStaff(c fiber.Ctx) error {
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return back(c, "error", "Ginagamit na ang email na ito.")
+		return back(c, "error", "This email address is already in use.")
 	}
-	return back(c, "success", "Nagawa na ang staff account.")
+	return back(c, "success", "Staff account created.")
 }
 func recordError(err error) error {
 	if errors.Is(err, gorm.ErrRecordNotFound) {

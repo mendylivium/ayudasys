@@ -125,7 +125,7 @@ const print = () => window.print()
           />
         </div>
         <p class="stub-instruction">
-          Dalhin ang stub at valid identification sa araw ng pamimigay. Subject to staff
+          Bring this stub and valid identification on distribution day. Subject to staff
           verification.
         </p>
         <p class="stub-token">{{ e.token }}</p>

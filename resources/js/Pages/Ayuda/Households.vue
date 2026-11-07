@@ -30,10 +30,10 @@ function clearFilters() {
   applySearch()
 }
 const labels = {
-  claimed: 'Nabigyan na',
-  pending: 'Hindi pa nabibigyan',
-  not_enrolled: 'Hindi naka-enroll',
-  no_program: 'Walang program',
+  claimed: 'Claimed',
+  pending: 'Pending release',
+  not_enrolled: 'Not enrolled',
+  no_program: 'No program selected',
 }
 const visibleHouseholds = computed(() =>
   props.households.filter((h) => status.value === 'all' || h.claim_status === status.value),
@@ -101,7 +101,7 @@ function applySearch() {
         class="grid grid-cols-1 md:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)_auto] gap-4 p-5 bg-base-200/30 items-end"
       >
         <fieldset class="fieldset p-0 min-w-0">
-          <label for="census-program" class="fieldset-legend py-0 mb-2">Ayuda program</label
+          <label for="census-program" class="fieldset-legend py-0 mb-2">Assistance program</label
           ><select
             id="census-program"
             v-model="program"
@@ -109,7 +109,7 @@ function applySearch() {
             :disabled="!programs.length"
             @change="applySearch"
           >
-            <option v-if="!programs.length" value="">Wala pang program</option>
+            <option v-if="!programs.length" value="">No programs available</option>
             <option v-for="p in programs" :key="p.id" :value="p.id">
               {{ p.name }} ({{ p.status }})
             </option>
@@ -124,10 +124,10 @@ function applySearch() {
             aria-label="Claim status"
             :disabled="!programs.length"
           >
-            <option value="all">Lahat ng household</option>
-            <option value="claimed">Nabigyan na</option>
-            <option value="pending">Hindi pa nabibigyan</option>
-            <option value="not_enrolled">Hindi naka-enroll</option>
+            <option value="all">All households</option>
+            <option value="claimed">Claimed</option>
+            <option value="pending">Pending release</option>
+            <option value="not_enrolled">Not enrolled</option>
           </select>
         </fieldset>
         <button class="btn" :disabled="loading" @click="applySearch">
@@ -163,7 +163,7 @@ function applySearch() {
       </div>
       <template v-if="mode === 'map'"
         ><p v-if="!visibleHouseholds.length" class="px-5 py-4 text-sm text-base-content/60">
-          Walang household sa napiling filters.
+          No households match the selected filters.
         </p>
         <CommunityMap :points="visibleHouseholds" class="min-h-112 rounded-none" />
         <p class="px-5 py-3 text-xs text-base-content/50">

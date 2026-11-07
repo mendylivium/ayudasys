@@ -14,10 +14,10 @@ function close(p) {
 </script>
 <template>
   <AppLayout
-    ><Head title="Ayuda programs" />
+    ><Head title="Assistance programs" />
     <div class="page-heading">
       <div>
-        <h1>Ayuda programs</h1>
+        <h1>Assistance programs</h1>
         <p class="muted">Organize each distribution, from registration to release.</p>
       </div>
       <button v-if="admin" class="btn" @click="creating = !creating">

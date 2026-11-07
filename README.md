@@ -184,7 +184,7 @@ Useful commands:
 
 ## Workflow
 
-1. **Create a program.** An administrator enters the program name, assistance package, date, and venue in **Ayuda programs**.
+1. **Create a program.** An administrator enters the program name, assistance package, date, and venue in **Assistance programs**.
 2. **Register the family.** An administrator or enumerator records household details and marks its home in **Household census**.
 3. **Review eligibility and enroll.** Staff determine eligibility, select the appropriate program on the household record, and issue its QR stub.
 4. **Print the stub.** Use **Print QR stubs**. The browser print dialog can also save a PDF.

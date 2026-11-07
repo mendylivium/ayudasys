@@ -22,10 +22,10 @@ function paint() {
   layer.clearLayers()
   props.points.forEach((p) => {
     const labels = {
-      claimed: 'Nabigyan na',
-      pending: 'Hindi pa nabibigyan',
-      not_enrolled: 'Hindi naka-enroll',
-      no_program: 'Walang napiling program',
+      claimed: 'Claimed',
+      pending: 'Pending release',
+      not_enrolled: 'Not enrolled',
+      no_program: 'No program selected',
     }
     const status = Object.hasOwn(labels, p.claim_status) ? p.claim_status : null
     const pointIcon = status
